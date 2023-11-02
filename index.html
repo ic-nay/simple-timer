@@ -1,0 +1,94 @@
+<html>
+  <head>
+    <style>
+      body {
+        background-color: #333;
+        font-family: Monospace;
+        color: #EEE;
+      }
+      #container {
+        margin-left: auto;
+        margin-right: auto;
+      }
+      #timer {
+        font-size: 20em;
+        text-align: center;
+      }
+      #bar {
+        width: 100%;
+        background-color: #EEE;
+        height: 2em;
+      }
+      #bar p {
+        color: #333;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container" onclick="pauseTimer()">
+      <p id="timer"></p>
+      <div id="bar"></div>
+    </div>
+  </body>
+  <script>
+    /*
+    Plausible additional features
+      - Pause
+      - Sound (check JS sound API) (OscillatorNode)
+      - Multiple timers
+        - Each timer will need to be self-contained
+        - Maybe make a Timer class?
+      - Message
+      - Background and accent colours
+      - Harden against XSS
+    */
+    var timerText = document.getElementById("timer");
+    var timerBar = document.getElementById("bar");
+    var startingValue;
+    var timerValue;
+    var timerInterval;
+    var blinkInterval;
+    var paused = false;
+    
+    function initialize(){
+      let params = new URL(document.location).searchParams;
+      startingValue = params.get("t");
+      timerValue = startingValue;
+      timerText.innerHTML = timerValue;
+      timerInterval = setInterval(updateTimer, 1000);
+    }
+
+    function updateTimer(){
+      timerValue --;
+      timerBar.style["width"] = 100*(timerValue/startingValue)+"%";
+      timerText.innerHTML = timerValue;
+      if (timerValue == 0){
+        clearInterval(timerInterval);
+      }
+    }
+    
+    function pauseTimer(){
+      paused = !paused;
+      if (paused){
+        pausedInterval = setInterval(updatePaused, 500);
+        clearInterval(timerInterval);
+      }
+      else {
+        clearInterval(pausedInterval);
+        timerInterval = setInterval(updateTimer, 1000);
+      }
+    }
+    
+    function updatePaused(){
+      if (timerText.innerHTML == "<br>"){
+        timerText.innerHTML = "Paused";
+      }
+      else {
+        timerText.innerHTML = "<br>";
+      }
+    }
+    
+    initialize();
+  </script>
+</html>
