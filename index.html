@@ -3,37 +3,47 @@
     <style>
       body {
         background-color: #333;
-        font-family: Monospace;
+        font-family: Courier New;
         color: #EEE;
       }
       #container {
         margin-left: auto;
         margin-right: auto;
+        height: 100%;
       }
-      #timer {
+      #timerText {
         font-size: 20em;
-        text-align: center;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        margin: 0;
+      }
+      #pauseText {
+        font-size: 10em;
+        position: absolute;
       }
       #bar {
         width: 100%;
         background-color: #EEE;
         height: 2em;
-      }
-      #bar p {
-        color: #333;
-        text-align: center;
+        margin: 0;
+        position: absolute;
+        bottom: 0;
       }
     </style>
   </head>
   <body>
     <div id="container" onclick="pauseTimer()">
-      <p id="timer"></p>
+      <p id="timerText"></p>
+      <p id="pauseText"></p>
       <div id="bar"></div>
     </div>
   </body>
   <script>
     /*
-    Plausible additional features
+    Plausible additional features and tweaks
+      - CSS: make font size relative rather than absolute.
       - Pause
       - Sound (check JS sound API) (OscillatorNode)
       - Multiple timers
@@ -41,9 +51,10 @@
         - Maybe make a Timer class?
       - Message
       - Background and accent colours
+        - gradients?
       - Harden against XSS
     */
-    var timerText = document.getElementById("timer");
+    var timerText = document.getElementById("timerText");
     var timerBar = document.getElementById("bar");
     var startingValue;
     var timerValue;
@@ -81,11 +92,11 @@
     }
     
     function updatePaused(){
-      if (timerText.innerHTML == "<br>"){
+      if (timerText.innerHTML == timerValue){
         timerText.innerHTML = "Paused";
       }
       else {
-        timerText.innerHTML = "<br>";
+        timerText.innerHTML = timerValue;
       }
     }
     
