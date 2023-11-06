@@ -48,10 +48,10 @@
       <p> If you're reading this, you probably tried to use the timer, and it didn't work.</p>
       <p> That means that one of the parameters was wrong (or that my code broke, sorry).</p>
       <p> This timer works via URL parameters, so they can just be clicked on and start running immediately, without much else being necessary.</p>
-      <p> For example, here's one that's set for <a href="/?t=90">90 seconds.</a></p>
+      <p> For example, here's one that's set for <a href="./?t=90">90 seconds.</a></p>
       <p class="example"> The URL for that is window.location.hostname/?t=90</p>
       <p>You can also style the foreground and background colours with <a href="https://en.wikipedia.org/wiki/Web_colors#Basic_colors">hex codes!</a></p>
-      <p>For example, here's another <a href="/?t=90&bg=FFF&c=F00">90 second timer</a>, this time with a <span class="white">white background</span> and a <span class="red">red foreground.</span></p>
+      <p>For example, here's another <a href="./?t=90&bg=FFF&c=F00">90 second timer</a>, this time with a <span class="white">white background</span> and a <span class="red">red foreground.</span></p>
       <p class="example"> The url for that one is window.location.hostname/?t=90&bg=FFF&c=F00 </p>
       <p> Below is a table of all the options currently available, with a list of what they do.</p>
       <table>
@@ -96,7 +96,7 @@
   </body>
   <script>
     for (example of document.getElementsByClassName("example")){
-      example.innerHTML = example.innerHTML.replace("window.location.hostname", window.location.hostname);
+      example.innerHTML = example.innerHTML.replace("window.location.hostname"+"/simple-timer/", window.location.hostname);
     }
   </script>
 </html>
