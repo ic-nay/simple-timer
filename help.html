@@ -96,7 +96,7 @@
   </body>
   <script>
     for (example of document.getElementsByClassName("example")){
-      example.innerHTML = example.innerHTML.replace("window.location.hostname"+"/simple-timer/", window.location.hostname);
+      example.innerHTML = example.innerHTML.replace("window.location.hostname", "https://"+window.location.hostname+"/simple-timer/");
     }
   </script>
 </html>

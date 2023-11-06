@@ -90,8 +90,7 @@
       
       //Getting the time
       if (params.get("t") == null){
-        console.error("Error here");
-        //window.location.assign("help.html");
+        window.location.assign("help.html");
       }
       for (char of params.get("t")){
         if (!isNaN(char)){
@@ -105,12 +104,7 @@
         startingValue = 60;
       }
       if (startingValue < 1){
-        console.error("Error here");
-        //window.location.assign("help.html"); 
-      }
-      if (!(unit in Object.keys(units))){
-        console.error("Error here");
-        //window.location.assign("help.html");
+        window.location.assign("help.html"); 
       }
       
       //Styling the page
@@ -120,8 +114,7 @@
           document.body.style.backgroundColor = "#"+bg;
         }
         else {
-          console.error("Error here");
-          //window.location.assign("help.html");
+          window.location.assign("help.html");
         }
       }
       
@@ -133,16 +126,18 @@
           timerBar.style.backgroundColor = "#"+c;
         }
         else {
-          console.error("Error here");
-          //window.location.assign("help.html");
+          window.location.assign("help.html");
         }
       }
       
       if (params.get("hidehelp") == "true"){
         help.style.display = "none";
       }
-      else {
+      else if (params.get("hidehelp") == null || params.get("hidehelp") == "false"){
         help.innerHTML = "Help";
+      }
+      else {
+          window.location.assign("help.html");     
       }
       
       timerValue = startingValue;
