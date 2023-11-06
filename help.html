@@ -1,0 +1,102 @@
+<html>
+  <head>
+    <style>
+      body {
+        background-color: #333;
+        font-family: Courier New;
+        color: #EEE;
+        margin-top: 10vh;
+        margin-bottom: 10vh;
+      }
+      .container {
+        width: 60vw;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .container p {
+        text-align: justify;
+      }
+      a {
+        color:#EEE;
+      }
+      a:visited{
+        color:#AAA;
+      }
+      a:hover{
+        color:#EEE;
+        text-shadow: 0 0 0.2em #EEE;
+      }
+      .white {
+        color:#FFF;
+      }
+      .red {
+        color:#F00;
+      }
+      table {
+        border-collapse: collapse;
+      }
+      th, td {
+        border: 1px solid #EEE;
+        text-align: center;
+        padding: 0.5em;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Hi there!</h1>
+      <p> If you're reading this, you probably tried to use the timer, and it didn't work.</p>
+      <p> That means that one of the parameters was wrong (or that my code broke, sorry).</p>
+      <p> This timer works via URL parameters, so they can just be clicked on and start running immediately, without much else being necessary.</p>
+      <p> For example, here's one that's set for <a href="index.html/?t=90">90 seconds.</a></p>
+      <p class="example"> The URL for that is window.location.hostname/?t=90</p>
+      <p>You can also style the foreground and background colours with <a href="https://en.wikipedia.org/wiki/Web_colors#Basic_colors">hex codes!</a></p>
+      <p>For example, here's another <a href="index.html/?t=90&bg=FFF&c=F00">90 second timer</a>, this time with a <span class="white">white background</span> and a <span class="red">red foreground.</span></p>
+      <p class="example"> The url for that one is window.location.hostname/?t=90&bg=FFF&c=F00 </p>
+      <p> Below is a table of all the options currently available, with a list of what they do.</p>
+      <table>
+        <tr>
+          <th>Name</th>
+          <th>Parameter</th>
+          <th>Description</th>
+          <th>Format</th>
+          <th>Default Value</th>
+        </tr>
+        <tr>
+          <td>Time</td>
+          <td>t</td>
+          <td>How long, in seconds, the timer should run for</td>
+          <td>t=x, where x is an integer</td>
+          <td>No default.*</td>
+        </tr>
+        <tr>
+          <td>Background Colour</td>
+          <td>bg</td>
+          <td>What color the background should be</td>
+          <td>Either bg=xxx or bg=xxxxxx, where each x is hexidecimal digit between 0 and F.</td>
+          <td>333</td>
+        </tr>
+        <tr>
+          <td>Foreground Colour</td>
+          <td>c</td>
+          <td>What color the text and bar should be</td>
+          <td>Either c=xxx or c=xxxxxx, where each x is hexidecimal digit between 0 and F.</td>
+          <td>EEE</td>
+        </tr>
+        <tr>
+          <td>Hide Help</td>
+          <td>hidehelp</td>
+          <td>Whether the help link in the top corner should be hidden.</td>
+          <td>Either hidehelp=true or hidehelp=false.</td>
+          <td>false</td>
+        </tr>
+      </table>
+      <p>*For parameters with no default, it will redirect to the help page.</p>
+    </div>
+  </body>
+  <script>
+    for (example of document.getElementsByClassName("example")){
+      example.innerHTML = example.innerHTML.replace("window.location.hostname", window.location.hostname);
+    }
+  </script>
+</html>
