@@ -7,7 +7,13 @@
         color: #EEE;
         margin:0;
         padding:0;
-        
+      }
+      #help {
+        position: absolute;
+        padding-right:1em;
+        padding-top:1em;
+        right:0;
+        color:#EEE;
       }
       #container {
         height: 100vh;
@@ -23,10 +29,6 @@
         transform: translate(-50%, -50%);
         margin: 0;
       }
-      #pauseText {
-        font-size: 10vh;
-        position: absolute;
-      }
       #bar {
         width: 100%;
         background-color: #EEE;
@@ -38,72 +40,131 @@
     </style>
   </head>
   <body>
+    <a href="../help.html" id="help">THIS TIMER REQUIRES JAVASCRIPT TO BE ENABLED</a>
     <div id="container" onclick="pauseTimer()">
       <p id="timerText"></p>
-      <p id="pauseText"></p>
       <div id="bar"></div>
     </div>
   </body>
   <script>
     /*
     Plausible additional features and tweaks
-      - CSS: make font size relative rather than absolute.
-      - Pause
       - Sound (check JS sound API) (OscillatorNode)
-      - Multiple timers
-        - Each timer will need to be self-contained
-        - Maybe make a Timer class?
       - Message
-      - Background and accent colours
-        - gradients?
-      - Harden against XSS
+      - See about adding in proper support for ms by using requestAnimationFrame()
+      - If I do do that, I may as well just support minutes and hours too, so I should maybe expand t to support a more flexible "XhYmZs" type of scheme
+      - See about having bar update smoothly.
+      - Additional options
+        - show full: contingent on whether I add support for minutes and hours, this would toggle, for example, if I input "3h" if it would then immediately change to "2:59:59" (by default on)
+        - show milliseconds (showms): contingent on whether I can even get ms working, this one toggles whether ms are shown.
+        - actually no wait, better option than both of these, just have something like cutoff that indicates past what point you no longer want to show the value.
+        - and then maybe showfull should still exist for the weirdos out there that want to start the clock at 0:10:00 and have that leading 0 there the whole time
+        - showtime: on the tin
+        - showbar: on the tin
+        - font: on the tin
+        - image? mayhaps.
+      - see about renaming to xhymzs because that looks and sounds cool.
     */
+    
     var timerText = document.getElementById("timerText");
     var timerBar = document.getElementById("bar");
+    var help = document.getElementById("help");
     var startingValue;
     var timerValue;
     var timerInterval;
-    var blinkInterval;
     var paused = false;
+    var unit;
+    var startTime;
+    var hexString = "0123456789ABCDEF";
+    var units = {
+      "m":60000,
+      "s":1000,
+      "":1000,
+      "ms":1,
+    }
     
     function initialize(){
       let params = new URL(document.location).searchParams;
-      startingValue = params.get("t");
+      startingValue = "";
+      unit = "";
+      
+      //Getting the time
+      if (params.get("t") == null){
+        window.location.assign("help.html"); 
+      }
+      for (char of params.get("t")){
+        if (!isNaN(char)){
+          startingValue += char;
+        }
+        else {
+          unit += char;
+        }
+      }
+      if (params.length == 0){
+        startingValue = 60;
+      }
+      if (startingValue < 1){
+        window.location.assign("help.html"); 
+      }
+      if (!(unit in Object.keys(units))){
+        window.location.assign("help.html");
+      }
+      
+      //Styling the page
+      if (params.get("bg") != null){
+        let bg = params.get("bg").toUpperCase();
+        if (isHex(bg)){
+          document.body.style.backgroundColor = "#"+bg;
+        }
+        else {
+          window.location.assign("help.html");
+        }
+      }
+      
+      if (params.get("c") != null){
+        let c = params.get("c").toUpperCase();
+        if (isHex(c)){
+          timerText.style.color = "#"+c;
+          help.style.color = "#"+c;
+          timerBar.style.backgroundColor = "#"+c;
+        }
+        else {
+          window.location.assign("help.html");
+        }
+      }
+      
+      if (params.get("hidehelp") == "true"){
+        help.style.display = "none";
+      }
+      else {
+        help.innerHTML = "Help";
+      }
+      
       timerValue = startingValue;
       timerText.innerHTML = timerValue;
-      timerInterval = setInterval(updateTimer, 1000);
+      timerInterval = setInterval(updateTimer, units[unit]);
+      startTime = Date.now();
+    }
+    
+    function isHex(str){
+      for (char of str) {
+        if (!hexString.includes(char)){
+          return false;
+        }
+      }
+      return true;
     }
 
     function updateTimer(){
-      timerValue --;
-      timerBar.style["width"] = 100*(timerValue/startingValue)+"%";
-      timerText.innerHTML = timerValue;
-      if (timerValue == 0){
-        clearInterval(timerInterval);
-      }
-    }
-    
-    function pauseTimer(){
-      paused = !paused;
-      if (paused){
-        pausedInterval = setInterval(updatePaused, 500);
-        clearInterval(timerInterval);
-      }
-      else {
-        clearInterval(pausedInterval);
-        timerInterval = setInterval(updateTimer, 1000);
-      }
-    }
-    
-    function updatePaused(){
-      if (timerText.innerHTML == timerValue){
-        timerText.innerHTML = "Paused";
-      }
-      else {
+      if (!paused) {
+        timerValue --;
+        timerBar.style["width"] = 100*(timerValue/startingValue)+"%";
         timerText.innerHTML = timerValue;
+        if (timerValue == 0){
+          clearInterval(timerInterval);
+        }
       }
     }
-    
     initialize();
   </script>
 </html>
