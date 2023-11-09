@@ -51,7 +51,9 @@
     Plausible additional features and tweaks
       - Sound (check JS sound API) (OscillatorNode)
       - Message
+      - Change to instead have clear error messages that link to the help page, rather than a hard redirect. That's so stupid. Why would I do that.
       - See about adding in proper support for ms by using requestAnimationFrame()
+      - Alternatively, maybe just do a jank thing where I use Date.now() and subtract? <--- Test how effective that is.
       - If I do do that, I may as well just support minutes and hours too, so I should maybe expand t to support a more flexible "XhYmZs" type of scheme
       - See about having bar update smoothly.
       - Additional options
@@ -62,8 +64,11 @@
         - showtime: on the tin
         - showbar: on the tin
         - font: on the tin
+        - font size: on the tin. maybe merge with font? just have it like css?
         - image? mayhaps.
-      - see about renaming to xhymzs because that looks and sounds cool.
+      - see about renaming to xhymzs because that looks and sounds cool. Would necessitate the support of that format.
+      - see about suggesting as a DDG bang, as that would greatly upgrade the functionality.
+      - README
     */
     
     var timerText = document.getElementById("timerText");
@@ -74,7 +79,6 @@
     var timerInterval;
     var paused = false;
     var unit;
-    var startTime;
     var hexString = "0123456789ABCDEF";
     var units = {
       "m":60000,
@@ -101,10 +105,13 @@
         }
       }
       if (params.length == 0){
-        startingValue = 60;
+        error("No params given");
+        return false;
       }
       if (startingValue < 1){
-        window.location.assign("help.html"); 
+        window.location.assign("help.html");
+        error("Error in ");
+        return false;
       }
       
       //Styling the page
@@ -115,6 +122,8 @@
         }
         else {
           window.location.assign("help.html");
+          error("Error in bg parameter");
+          return false;
         }
       }
       
@@ -127,6 +136,8 @@
         }
         else {
           window.location.assign("help.html");
+          error("Error in c parameter");
+          return false;
         }
       }
       
@@ -137,13 +148,14 @@
         help.innerHTML = "Help";
       }
       else {
-          window.location.assign("help.html");     
+          window.location.assign("help.html");
+          error("Error in hidehelp parameter.");
+          return false;
       }
       
       timerValue = startingValue;
       timerText.innerHTML = timerValue;
       timerInterval = setInterval(updateTimer, units[unit]);
-      startTime = Date.now();
     }
     
     function isHex(str){
