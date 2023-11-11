@@ -1,5 +1,6 @@
 <html>
   <head>
+    <title>Simple Timer</title>
     <style>
       body {
         background-color: #333;
@@ -14,6 +15,7 @@
         padding-top:1em;
         right:0;
         color:#EEE;
+        font-size: 2em;
       }
       #container {
         height: 100vh;
@@ -28,6 +30,7 @@
         top: 50%;
         transform: translate(-50%, -50%);
         margin: 0;
+        text-align:center;
       }
       #bar {
         width: 100%;
@@ -40,7 +43,7 @@
     </style>
   </head>
   <body>
-    <a href="../help.html" id="help">THIS TIMER REQUIRES JAVASCRIPT TO BE ENABLED</a>
+    <a href="./help.html" id="help">THIS TIMER REQUIRES JAVASCRIPT TO BE ENABLED</a>
     <div id="container" onclick="pauseTimer()">
       <p id="timerText"></p>
       <div id="bar"></div>
@@ -51,7 +54,6 @@
     Plausible additional features and tweaks
       - Sound (check JS sound API) (OscillatorNode)
       - Message
-      - Change to instead have clear error messages that link to the help page, rather than a hard redirect. That's so stupid. Why would I do that.
       - See about adding in proper support for ms by using requestAnimationFrame()
       - Alternatively, maybe just do a jank thing where I use Date.now() and subtract? <--- Test how effective that is.
       - If I do do that, I may as well just support minutes and hours too, so I should maybe expand t to support a more flexible "XhYmZs" type of scheme
@@ -92,9 +94,12 @@
       startingValue = "";
       unit = "";
       
+      help.innerHTML = "Help";
+      
       //Getting the time
       if (params.get("t") == null){
-        window.location.assign("help.html");
+        error("No time specified");
+        return false;
       }
       for (char of params.get("t")){
         if (!isNaN(char)){
@@ -105,12 +110,11 @@
         }
       }
       if (params.length == 0){
-        error("No params given");
+        error("No parameters given");
         return false;
       }
       if (startingValue < 1){
-        window.location.assign("help.html");
-        error("Error in ");
+        error("Error in parameter 't'");
         return false;
       }
       
@@ -121,8 +125,7 @@
           document.body.style.backgroundColor = "#"+bg;
         }
         else {
-          window.location.assign("help.html");
-          error("Error in bg parameter");
+          error("Error in parameter 'bg'");
           return false;
         }
       }
@@ -135,22 +138,13 @@
           timerBar.style.backgroundColor = "#"+c;
         }
         else {
-          window.location.assign("help.html");
-          error("Error in c parameter");
+          error("Error in parameter 'c'");
           return false;
         }
       }
       
-      if (params.get("hidehelp") == "true"){
+      if (params.get("hidehelp") != null){
         help.style.display = "none";
-      }
-      else if (params.get("hidehelp") == null || params.get("hidehelp") == "false"){
-        help.innerHTML = "Help";
-      }
-      else {
-          window.location.assign("help.html");
-          error("Error in hidehelp parameter.");
-          return false;
       }
       
       timerValue = startingValue;
@@ -176,6 +170,16 @@
           clearInterval(timerInterval);
         }
       }
+    }
+    
+    function error(message){
+      displayMessage(message);
+    }
+    
+    function displayMessage(message){
+      timerText.innerHTML = message;
+      console.log(message.length);
+      timerText.style.fontSize = 3+"vw";
     }
     initialize();
   </script>
