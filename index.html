@@ -17,6 +17,14 @@
         color:#EEE;
         font-size: 2em;
       }
+      #toolTip {
+        position: absolute;
+        padding-left:1em;
+        padding-top:1em;
+        left:0;
+        color:#EEE;
+        font-size: 2em;     
+      }
       #container {
         height: 100vh;
         width: 100vw;
@@ -44,6 +52,7 @@
   </head>
   <body>
     <a href="./help.html" id="help">THIS TIMER REQUIRES JAVASCRIPT TO BE ENABLED</a>
+    <span id="toolTip"></span>
     <div id="container">
       <p id="timerText"></p>
       <div id="bar"></div>
@@ -78,11 +87,13 @@
     var timerText = document.getElementById("timerText");
     var timerBar = document.getElementById("bar");
     var help = document.getElementById("help");
+    var toolTip = document.getElementById("toolTip");
     var startingValue;
     var timerValue;
     var timerInterval;
     var paused = false;
     var unit;
+    var message = "0";
     var units = {
       "m":60000,
       "s":1000,
@@ -145,11 +156,16 @@
       }
       
       if (params.get("fullscreen") != null){
+        document.addEventListener("fullscreenerror", addFullscreenClick);
         document.documentElement.requestFullscreen();
       }
       
       if (params.get("hidehelp") != null){
         help.style.display = "none";
+      }
+      
+      if (params.get("m") != null) {
+        message = clean(params.get("m"));
       }
       
       timerValue = startingValue;
@@ -166,6 +182,42 @@
       }
       return true;
     }
+    
+    function clean(str){
+      returnString = "";
+      for (char of str){
+        if (char == "<"){
+          returnString += "&lt;";
+        }
+        else if (char == ">"){
+          returnString += "&gt;";
+        }
+        else {
+          returnString += char;
+        }
+      }
+      return returnString;
+    }
+    
+    function addFullscreenClick(){
+      toolTip.innerHTML = "Click to open in full screen"
+      document.addEventListener("fullscreenchange", function(){
+        if (toolTip.innerHTML == ""){
+          toolTip.innerHTML = "Click to open in full screen"
+        }
+        else {
+          toolTip.innerHTML = "";
+        }
+      });
+      document.addEventListener("click", function(){
+        if (!document.fullscreenElement){
+          document.documentElement.requestFullscreen();
+        }
+        else {
+          document.exitFullscreen();
+        }
+      });
+    }
 
     function updateTimer(){
       if (!paused) {
@@ -173,6 +225,7 @@
         timerBar.style["width"] = 100*(timerValue/startingValue)+"%";
         timerText.innerHTML = timerValue;
         if (timerValue == 0){
+          timerText.innerHTML = message;
           clearInterval(timerInterval);
         }
       }

@@ -27,12 +27,6 @@
         color:#EEE;
         text-shadow: 0 0 0.2em #EEE;
       }
-      .white {
-        color:#FFF;
-      }
-      .red {
-        color:#F00;
-      }
       table {
         border-collapse: collapse;
       }
@@ -49,11 +43,19 @@
       <p> If you're reading this, you probably tried to use the timer, and it didn't work.</p>
       <p> That means that one of the parameters was wrong (or that my code broke, sorry).</p>
       <p> This timer works via URL parameters, so they can just be clicked on and start running immediately, without much else being necessary.</p>
-      <p> For example, here's one that's set for <a href="./?t=90">90 seconds.</a></p>
-      <p class="example"> The URL for that is window.location.hostname?t=90</p>
+      <example>
+        <p> For example, here's one that's set for <a href="./?t=90">90 seconds.</a></p>
+        <p class="example"> The URL for that is window.location.hostname?t=90</p>
+      </example>
       <p>You can also style the foreground and background colours with <a href="https://en.wikipedia.org/wiki/Web_colors#Basic_colors">hex codes!</a></p>
-      <p>For example, here's another <a href="./?t=90&bg=FFF&c=F00">90 second timer</a>, this time with a <span class="white">white background</span> and a <span class="red">red foreground.</span></p>
-      <p class="example"> The url for that one is window.location.hostname?t=90&bg=FFF&c=F00 </p>
+      <example>
+        <p>For example, here's another <a href="./?t=90&bg=FFF&c=F00">90 second timer</a>, this time with a <span style="background-color:white; color: red;">white background and a red foreground.</span></p>
+        <p class="example"> The url for that one is window.location.hostname?t=90&bg=FFF&c=F00 </p>
+      </example>
+      <example>
+        <p>One last example, here's a <a href="./?t=60&bg=000&c=F00&hidehelp&fullscreen&m=Hello, World!">60 second timer</a>, which hides the help dialogue, adds the ability to open in fullscreen, adds a message at the end, with a black background and red foreground.</p>
+        <p class="example"> The url for that one is window.location.hostname?t=60&bg=000&c=F00&hidehelp&fullscreen&m=Hello, World! </p>
+      </example>
       <p> Below is a table of all the options currently available, with a list of what they do.</p>
       <table>
         <tr>
@@ -68,31 +70,44 @@
           <td>t</td>
           <td>How long, in seconds, the timer should run for</td>
           <td>t=x, where x is an integer</td>
-          <td>No default.*</td>
+          <td>If t is left blank, the timer will not run.</td>
+        </tr>
+        <tr>
+          <td>Message</td>
+          <td>m</td>
+          <td>The message that displays after the countdown is complete</td>
+          <td>m=x, where x is the message</td>
+          <td>No default.</td>
         </tr>
         <tr>
           <td>Background Colour</td>
           <td>bg</td>
           <td>What color the background should be</td>
-          <td>Either bg=xxx or bg=xxxxxx, where each x is hexidecimal digit between 0 and F.</td>
+          <td>Either bg=xxx or bg=xxxxxx, where each x is hexidecimal digit between 0 and F</td>
           <td>333</td>
         </tr>
         <tr>
           <td>Foreground Colour</td>
           <td>c</td>
           <td>What color the text and bar should be</td>
-          <td>Either c=xxx or c=xxxxxx, where each x is hexidecimal digit between 0 and F.</td>
+          <td>Either c=xxx or c=xxxxxx, where each x is hexidecimal digit between 0 and F</td>
           <td>EEE</td>
         </tr>
         <tr>
           <td>Hide Help</td>
           <td>hidehelp</td>
           <td>Whether the help link in the top corner should be hidden.</td>
-          <td>The presence of the hidehelp parameter in the url sets it to true, otherwise it is false.</td>
+          <td>The presence of the hidehelp parameter in the url sets it to true, otherwise it is false</td>
+          <td>false</td>
+        </tr>
+        <tr>
+          <td>Full screen</td>
+          <td>fullscreen</td>
+          <td>Attempts to automatically open the timer in full screen, and if that is not possible, adds the ability to open the timer in full screen by clicking anywhere on the screen.</td>
+          <td>The presence of the fullscreen parameter in the url sets it to true, otherwise it is false</td>
           <td>false</td>
         </tr>
       </table>
-      <p>*For parameters with no default, it will redirect to the help page.</p>
     </div>
   </body>
   <script>
